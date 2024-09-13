@@ -193,7 +193,7 @@ export async function UpdateRequest(id, status) {
   let URL = baseURL + "/UpdateTask/" + id + "/" + status;
   try {
     store.dispatch(ShowLoader());
-    let result = await axios.get(URL, AxiosHeader);
+    let result = await axios.put(URL, AxiosHeader);
     store.dispatch(HideLoader());
     if (result.status === 201) {
       SuccessToast("Update Success");
