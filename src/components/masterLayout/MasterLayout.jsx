@@ -61,7 +61,7 @@ const MasterLayout = (props) => {
                 <div className="mt-4 text-center">
                   <img
                     className="icon-nav-img"
-                    src={getUserDetails()[0]?.photo}
+                    src={getUserDetails()?.photo}
                     alt=""
                   />
                   <h6>{getUserDetails()[0]?.firstName}</h6>
