@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ErrorToast, SuccessToast } from "../helper/FormHelper";
 import {
-  getEmail,
   getToken,
   setEmail,
   setOTP,
@@ -18,8 +17,8 @@ import {
 } from "../redox/state-slice/taskSlice";
 import { setProfile } from "../redox/state-slice/profileSlice";
 import store from "../redox/store/store";
-const baseURL = "https://task-management-backend-ep6l.onrender.com/api/v1";
-//const baseURL = "http://localhost:5400/api/v1";
+//const baseURL = "https://task-management-backend-ep6l.onrender.com/api/v1";
+const baseURL = "http://localhost:5400/api/v1";
 const AxiosHeader = { headers: { token: getToken() } };
 
 export const LoginRequest = async (email, password) => {
@@ -245,50 +244,48 @@ export async function GetProfileDetails() {
   }
 }
 
-export function UserProfileUpdate(
+export const UserProfileUpdate = async (
   email,
   firstName,
   lastName,
   mobile,
   password,
   photo
-) {
-  store.dispatch(ShowLoader());
-  let URL = baseURL + "/UpdateProfiles";
-  let postBody = {
-    email: email,
-    firstName: firstName,
-    lastName: lastName,
-    mobile: mobile,
-    password: password,
-    photo: photo,
-  };
-  let UserDetalis = {
-    email: email,
-    firstName: firstName,
-    lastName: lastName,
-    mobile: mobile,
-    photo: photo,
-  };
-  return axios
-    .post(URL, postBody, AxiosHeader)
-    .then((res) => {
-      store.dispatch(HideLoader());
-      if (res.status === 201) {
-        SuccessToast("Profile Update Success");
-        setUserDetails(UserDetalis);
-        return true;
-      } else {
-        ErrorToast("Somethig Went Wrong");
-        return false;
-      }
-    })
-    .catch((err) => {
-      ErrorToast("Something Went Wrong");
-      store.dispatch(HideLoader());
+) => {
+  try {
+    store.dispatch(ShowLoader());
+    let URL = baseURL + "/UpdateProfiles";
+    let PostBody = {
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      mobile: mobile,
+      password: password,
+      photo: photo,
+    };
+    let UserDetails = {
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      mobile: mobile,
+      password: password,
+      photo: photo,
+    };
+    let res = await axios.put(URL, PostBody, AxiosHeader);
+    store.dispatch(HideLoader());
+    if (res.status === 201 && res.data["status"] === "success") {
+      setUserDetails(UserDetails);
+      SuccessToast("Update Success");
+      return true;
+    } else {
+      ErrorToast("Something Wrong");
       return false;
-    });
-}
+    }
+  } catch (err) {
+    store.dispatch(HideLoader());
+    ErrorToast(err, "Something Went Wrong");
+  }
+};
 
 // Recovery Password step 1 SendOTP
 

@@ -54,7 +54,7 @@ const MasterLayout = (props) => {
             <div className="user-dropdown">
               <img
                 className="icon-nav-img icon-nav"
-                src={getUserDetails()[0]?.photo}
+                src={getUserDetails()?.photo}
                 alt=""
               />
               <div className="user-dropdown-content ">
