@@ -15,6 +15,7 @@ const Login = () => {
       ErrorToast("Password Required");
     } else {
       let result = await LoginRequest(email, password);
+      console.log(result, "data");
       if (result === true) {
         window.location.href = "/";
       }

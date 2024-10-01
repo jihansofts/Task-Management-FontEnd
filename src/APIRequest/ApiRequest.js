@@ -18,8 +18,8 @@ import {
 } from "../redox/state-slice/taskSlice";
 import { setProfile } from "../redox/state-slice/profileSlice";
 import store from "../redox/store/store";
-const baseURL = "https://task-management-backend-ep6l.onrender.com/api/v1";
-// const baseURL = "http://localhost:5400/api/v1";
+//const baseURL = "https://task-management-backend-ep6l.onrender.com/api/v1";
+const baseURL = "http://localhost:5400/api/v1";
 const AxiosHeader = { headers: { token: getToken() } };
 
 export const LoginRequest = async (email, password) => {
@@ -29,18 +29,13 @@ export const LoginRequest = async (email, password) => {
     store.dispatch(ShowLoader());
     let res = await axios.post(URL, { email: email, password: password });
     store.dispatch(HideLoader());
-    console.log(res, "data");
+    console.log(res.data["data"].length > 0, "login");
     if (res.status === 201 && res.data["status"] === "success") {
-      if (res.data["data"].length > 0) {
-        setToken(res.data["token"]);
-        setEmail(email);
-        setUserDetails(res.data["data"]);
-        SuccessToast("Login Success");
-        return true;
-      } else {
-        ErrorToast("Something Wrong");
-        return false;
-      }
+      setToken(res.data["token"]);
+      setEmail(email);
+      setUserDetails(res.data["data"]);
+      SuccessToast("Login Success");
+      return true;
     } else {
       ErrorToast("Something Went Wrong");
       return false;
